@@ -93,7 +93,7 @@
                         android:id="@+id/task_detail_title_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/task_detail_complete_checkbox"
+                        android:layout_toLeftOf="@id/task_detail_complete_checkbox"
                         android:paddingTop="1dp"
                         android:text="@{viewmodel.task.title}"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -103,7 +103,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/task_detail_title_text"
-                        android:layout_toRightOf="@id/task_detail_complete_checkbox"
+                        android:layout_toLeftOf="@id/task_detail_complete_checkbox"
                         android:paddingTop="1dp"
                         android:text="@{viewmodel.task.description}"
                         android:textAppearance="?android:attr/textAppearanceMedium" />

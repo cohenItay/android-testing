@@ -50,14 +50,26 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
-    // Dependencies for local unit tests
-    testImplementation "junit:junit:$junitVersion"
-
-    // AndroidX Test - Instrumented testing
-    androidTestImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
+
+    // Dependencies for local unit tests
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.hamcrest:hamcrest:$hamcrestVersion" // readable assertions
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion" // comes with the core
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion" // collection of Jetpack libraries: JUnit4 rules to start activities and interact with them in JUnit4 tests. It also contains UI Testing frameworks such as Espresso, UI Automator and the Robolectric simulator
+    testImplementation "org.robolectric:robolectric:$robolectricVersion" // Robolectric is a library that creates a simulated Android environment for tests and runs faster than booting up an emulator or running on a device
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion" // Tools to test architecture components (such as LiveData), for example it has InstantTaskExecutorRule
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion" // AndroidX test library for creating fragments in tests and changing their state. Testing code should not be included in the main code, Once https://issuetracker.google.com/128612536 is fixed this can be fixed.
+    debugImplementation "androidx.test:core:$androidXTestCoreVersion" // Core AndroidX test library. Testing code should not be included in the main code, Once https://issuetracker.google.com/128612536 is fixed this can be fixed.
+    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion" //This library is required to use Mockito in an Android project. Mockito needs to generate classes at runtime. On Android, this is done using dex byte code, and so this library enables Mockito to generate objects during runtime on Android.
 }
