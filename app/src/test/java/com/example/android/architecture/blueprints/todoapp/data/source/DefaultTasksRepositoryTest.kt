@@ -19,6 +19,13 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class DefaultTasksRepositoryTest {
 
+    /*
+    * When you start new coroutines on a StandardTestDispatcher, they are queued up on the underlying scheduler,
+    * to be run whenever the test thread is free to use.
+    * To let these new coroutines run, you need to yield the test thread (free it up for other coroutines to use).
+    * This queueing behavior gives you precise control over how new coroutines run during the test,
+    * and it resembles the scheduling of coroutines in production code.
+    */
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule(StandardTestDispatcher())
 
@@ -40,12 +47,12 @@ class DefaultTasksRepositoryTest {
         tasksRepository = DefaultTasksRepository(
             tasksRemoteDataSource = tasksRemoteDataSource,
             tasksLocalDataSource = tasksLocalDataSource,
-            ioDispatcher = mainDispatcherRule.testDispatcher // IMPORTANT!
+            ioDispatcher = mainDispatcherRule.testDispatcher // IMPORTANT! the repo might execute code in parallel manner, we want to prevent it for the test become deterministic (not flaky). we achieve this by inject test scope / dispatcher
         )
     }
 
     @Test
-    fun getTasks_requestsAllTasksFromRemoteDataSource() = runTest { // Use this kotlin function to run tests.
+    fun getTasks_requestsAllTasksFromRemoteDataSource() = runTest { // Use this kotlin function to run tests
         /*
          runTest has the following behaviors meant for testing:
                 1. It skips delay, so your tests run faster.

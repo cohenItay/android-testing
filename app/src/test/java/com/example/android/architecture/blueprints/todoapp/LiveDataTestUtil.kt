@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException
  * gets the LiveData value, and then cleans up the observer—basically a short,
  * reusable version of the observeForever in tests
  */
-@VisibleForTesting(otherwise = VisibleForTesting.NONE)
+@VisibleForTesting(otherwise = VisibleForTesting.NONE) // make this function visible for test, None for production code.
 fun <T> LiveData<T>.getOrAwaitValue(
     time: Long = 2,
     timeUnit: TimeUnit = TimeUnit.SECONDS,
@@ -34,7 +34,7 @@ fun <T> LiveData<T>.getOrAwaitValue(
 
         // Don't wait indefinitely if the LiveData is not set.
         if (!latch.await(time, timeUnit)) {
-            throw TimeoutException("LiveData value was never set.")
+            throw TimeoutException("LiveData value was not set within $time $timeUnit.")
         }
 
     } finally {

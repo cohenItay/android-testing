@@ -8,7 +8,6 @@ import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeTasksRepository
 import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -32,7 +31,7 @@ class TasksViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule() //This rule runs all Architecture Components-related background jobs in the same thread so that the test results happen synchronously, and in a repeatable order. When you write tests that include testing LiveData, use this rule!
 
     @get:Rule
-    var mainDispatcherRule = MainDispatcherRule()
+    var mainDispatcherRule = MainDispatcherRule(UnconfinedTestDispatcher())
 
     private lateinit var tasksRepository: FakeTasksRepository
 
@@ -85,10 +84,13 @@ class TasksViewModelTest {
     }
 
     @Test
-    fun completeTask_dataAndSnackbarUpdated() = runTest {
-        // Replace the main Dispatcher in order for the viewModel to be able to work properly. (They are referencing the Main thread hard-coded within)
-        // Use UnconfinedTestDispatcher to start eagerly all of the different new coroutines
+    fun completeTask_dataAndSnackbarUpdated() {
+        // The viewModel uses the FakeRepo which uses coroutine.
+        // In order to test ViewModel successfully (which uses coroutines internally) we must replace the Dispatchers.Main, doing so:
         //!-------- Dispatchers.setMain(UnconfinedTestDispatcher(testScheduler)) ------------!
+        // And at the end of this function resetting it:
+        //!------ Dispatchers.resetMain() // reset the main dispatcher -------!
+        //Instead of writing it on each test, we are using the MainDispatcherRule.
 
         // Create an active task and add it to the repository.
         val task = Task("Title", "Description")
@@ -103,9 +105,6 @@ class TasksViewModelTest {
         // Assert that the snackbar has been updated with the correct text.
         val snackbarText: Event<Int> =  vm.snackbarText.getOrAwaitValue()
         assertThat(snackbarText.getContentIfNotHandled(), `is`(R.string.task_marked_complete))
-        //!------ Dispatchers.resetMain() // reset the main dispatcher -------!
-        /*
-        Instead of declaring each time  on changing the dispatcher we can use a rule for that.
-         */
+
     }
 }
