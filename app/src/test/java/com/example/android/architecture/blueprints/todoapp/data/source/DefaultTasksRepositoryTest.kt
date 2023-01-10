@@ -3,9 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.data.source
 import com.example.android.architecture.blueprints.todoapp.MainDispatcherRule
 import com.example.android.architecture.blueprints.todoapp.data.Result
 import com.example.android.architecture.blueprints.todoapp.data.Task
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runBlockingTest
@@ -58,7 +56,7 @@ class DefaultTasksRepositoryTest {
                 1. It skips delay, so your tests run faster.
                 2. It adds testing related assertions to the end of the coroutine.
                    These assertions fail if you launch a coroutine and it continues running after
-                   the end of the runBlocking lambda (which is a possible coroutine leak) or
+                   the end of the runTest lambda (which is a possible coroutine leak) or
                    if you have an uncaught exception.
                 3. It gives you timing control over the coroutine execution.
          */
@@ -87,6 +85,7 @@ class DefaultTasksRepositoryTest {
         launch {
             tasks = tasksRepository.getTasks(true) as Result.Success
         }
+
         /**
          * When you start new coroutines on a StandardTestDispatcher they are queued up on the underlying scheduler,
          * to be run whenever the test thread is free to use.

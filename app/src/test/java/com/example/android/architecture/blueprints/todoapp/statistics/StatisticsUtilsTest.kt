@@ -5,6 +5,10 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
 
+/**
+ * This is the simplest tests there is.
+ * They test pure logic and have no complex dependencies.
+ */
 class StatisticsUtilsTest {
 
     @Test

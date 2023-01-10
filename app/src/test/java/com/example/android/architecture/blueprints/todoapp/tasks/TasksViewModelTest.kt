@@ -8,6 +8,7 @@ import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeTasksRepository
 import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -38,7 +39,7 @@ class TasksViewModelTest {
     /**
      * Shared member to all different tests
      */
-    private lateinit var vm: TasksViewModel
+    private lateinit var vm: TasksViewModel // class under test
 
     @Before
     fun setupViewModel() {
@@ -74,7 +75,7 @@ class TasksViewModelTest {
         }
 
         // This try-finally code is a boilerplate and complicated, we can use instead: (see also following function doc)
-         vm.newTaskEvent.getOrAwaitValue { /*In this lambda, Do assertions after observation*/ }
+         vm.newTaskEvent.getOrAwaitValue { /*This lambda just notified that the observation occurred, you can leave it empty */ }
     }
 
     @Test
